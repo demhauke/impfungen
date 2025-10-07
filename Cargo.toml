@@ -1,0 +1,9 @@
+[package]
+name = "impfungen"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gtk = { version = "0.10.1", package = "gtk4", features = ["v4_10", "v4_12", "v4_14", "v4_16", "v4_18"] }
+gio = { version = "0.20" }
+glib = "0.20"
