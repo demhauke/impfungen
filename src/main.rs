@@ -1,19 +1,19 @@
-use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Button, Entry, ListBox, Orientation, SpinButton, Adjustment};
-
-use gio::prelude::*;
 use gio::Settings;
+use gtk::prelude::*;
+use gtk::{Application, ApplicationWindow, Button, Entry, ListBox, Orientation, SpinButton, Adjustment, HeaderBar};
 
-// use Impfungen::Impfung;
+// use gio::prelude::*;
+// use gio::Settings;
+
+use impfungen::Impfung;
 
 const APP_ID: &str = "dem.hauke.Impfungen";
 
 
 fn main() {
+    
+    let settings = Settings::new(APP_ID);
 
-    //let mut list_of_impfungen: Vec<Impfung> = vec![];
-
-    //let settings = Settings::new(APP_ID);
 
     let app = Application::new(
         Some(APP_ID),
@@ -25,6 +25,8 @@ fn main() {
 }
 
 fn build_ui(application: &Application){
+
+    let mut list_of_impfungen: Vec<Impfung> = vec![];
 
     let vbox = gtk::Box::new(Orientation::Vertical, 5);
 
@@ -91,8 +93,17 @@ fn build_ui(application: &Application){
     entry_hbox.append(&add_button);
 
 
+    let header = HeaderBar::new();
+
+    let reload_btn = Button::from_icon_name("view-refresh");
+
+
+    header.pack_end(&reload_btn);
+
+
     let window = ApplicationWindow::builder()
         .application(application)
+        .titlebar(&header)
         .title("Impfungen")
         .default_width(600)
         .default_height(300)

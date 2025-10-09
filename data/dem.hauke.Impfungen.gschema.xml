@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="dem.hauke.Impfungen" path="/dem/hauke/Impfungen/">
+    <key name="impfungen" type="s">
+      <default>"[]"</default>
+      <summary>Gespeicherte Impfungen</summary>
+      <description>JSON-Array der gespeicherten Impfungen.</description>
+    </key>
+  </schema>
+</schemalist>
