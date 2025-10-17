@@ -1,3 +1,6 @@
+use std::rc::Rc;
+
+use chrono::NaiveDate;
 use gio::Settings;
 use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Button, Entry, ListBox, Orientation, SpinButton, Adjustment, HeaderBar};
@@ -26,7 +29,8 @@ fn main() {
 
 fn build_ui(application: &Application){
 
-    let mut list_of_impfungen: Vec<Impfung> = vec![];
+    let mut list_of_impfungen: Vec<Impfung> = vec![Impfung::new("test".to_string(), NaiveDate::from_ymd_opt(2005, 05, 19).expect("REASON"), 6)];
+
 
     let vbox = gtk::Box::new(Orientation::Vertical, 5);
 
@@ -54,6 +58,8 @@ fn build_ui(application: &Application){
     let spin_clone = spin.clone();
     let listbox_clone = listbox.clone();
 
+
+
     add_button.connect_clicked(move |_| {
 
         let name_text = name_entry_clone.text().to_string();
@@ -63,7 +69,11 @@ fn build_ui(application: &Application){
         if format!("{name_text}{date_text}").is_empty(){
             return;
         }
+
+        //let row = ListBoxRowExt
+
         let hbox = gtk::Box::new(Orientation::Horizontal, 3);
+
 
         let name = gtk::Label::new(Some(&name_text));
         let date = gtk::Label::new(Some(&date_text));
@@ -101,6 +111,16 @@ fn build_ui(application: &Application){
     header.pack_end(&reload_btn);
 
 
+    //let list_of_impfungen_copy = list_of_impfungen.clone();
+    reload_btn.connect_clicked(move |_| {
+
+        reset(&list_of_impfungen, &listbox);
+        
+    });
+
+
+    
+
     let window = ApplicationWindow::builder()
         .application(application)
         .titlebar(&header)
@@ -112,4 +132,35 @@ fn build_ui(application: &Application){
     window.set_child(Some(&vbox));
     window.present();
 
+    reload_btn.emit_clicked(); // Damit reset ausgeführt wird
+
 }
+
+fn reset(list_of_impfungen: &Vec<Impfung>, listbox: &ListBox) {
+
+    listbox.remove_all();
+
+    for impfung in list_of_impfungen{
+        append_listbox_row(listbox, impfung);
+    }
+}
+
+fn append_listbox_row(listbox: &ListBox, impfung: &Impfung){
+
+
+    let hbox = gtk::Box::new(Orientation::Horizontal, 3);
+
+
+    let name = gtk::Label::new(Some(&impfung.name));
+    // let date = gtk::Label::new(Some(&impfung.d));
+    // let time = gtk::Label::new(Some(&expiration_time.to_string()));
+
+    hbox.append(&name);
+    // hbox.append(&date);
+    // hbox.append(&time);
+
+    listbox.append(&hbox);
+
+    //listbox_clone.append(&hbox);
+}
+
